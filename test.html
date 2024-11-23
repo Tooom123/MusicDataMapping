@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques Artiste</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Albums de l'artiste</h1>
+        <input type="text" id="artist" placeholder="Nom de l'artiste" class="form-control my-3">
+        <button onclick="displayAlbums()" class="btn btn-primary">Rechercher</button>
+        <ul id="album-list" class="list-group mt-4"></ul>
+    </div>
+
+    <script>
+        const getAccessToken = async () => {
+            // Implémente ta logique ici pour obtenir un token, soit via un backend ou autre
+            // Pour tester, utilise un token temporaire
+            return 'YOUR_SPOTIFY_ACCESS_TOKEN';
+        };
+
+        const fetchAlbums = async (artist) => {
+            const token = await getAccessToken(); // Obtenir le token
+            const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(artist)}&type=album`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.albums.items;
+                } else {
+                    console.error('Erreur lors de la récupération des données');
+                    return [];
+                }
+            } catch (error) {
+                console.error('Erreur réseau ou serveur', error);
+                return [];
+            }
+        };
+
+        const displayAlbums = async () => {
+            const artist = document.getElementById('artist').value;
+            if (!artist) {
+                alert("Veuillez entrer un nom d'artiste.");
+                return;
+            }
+
+            const albums = await fetchAlbums(artist);
+            const albumList = document.getElementById('album-list');
+            albumList.innerHTML = ''; // Nettoie la liste avant d'ajouter des albums
+
+            if (albums.length === 0) {
+                albumList.innerHTML = "<li class='list-group-item'>Aucun album trouvé.</li>";
+            } else {
+                albums.forEach(album => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.textContent = `${album.name} - ${album.artists[0].name}`;
+                    albumList.appendChild(listItem);
+                });
+            }
+        };
+    </script>
+</body>
+</html>
