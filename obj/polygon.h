@@ -7,8 +7,7 @@
 
 class Polygon{
 public:
-  // define the attributes
-
+  std::vector<Point*> sommets;
   Polygon(std::vector<Point*> vert);
   double area();
   Point* random();

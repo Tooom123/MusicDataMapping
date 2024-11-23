@@ -4,23 +4,23 @@
 Point::Point(const double x, const double y): x(x),y(y){}
 
 Point* Point::vector(Point* p){
-    Point *a = new Point(p->x-x, p->y-y);
+    Point *a = new Point(p->x - x, p->y - y);
     return a;
 }
 
 Point* Point::center(Point* b) {
-    Point *a = new Point((x+b->x)/2, (y+b->y)/2);
+  Point *a = new Point((x+b->x)/2, (y+b->y)/2);
   return a;
 }
 
 Point* Point::translate(Point* p){
     Point *a = new Point(x+p->x, y+p->y);
-  return a;
+    return a;
 }
 
 Point* Point::scal(double coef){
     Point *a = new Point(x*coef, y*coef);
-  return a;
+    return a;
 }
 
 double Point::det(Point* p){

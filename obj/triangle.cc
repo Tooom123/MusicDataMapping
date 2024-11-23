@@ -21,25 +21,21 @@ double Triangle::area(){
     return rebeu_deter * 1/2;
 }
 
-Point* Triangle::random(){
+Point* Triangle::random() {
     Point *vecab = aa->vector(bb);
     Point *vecac = aa->vector(cc);
-    double r1 = ((double) rand() / (RAND_MAX));
-    double r2 = ((double) rand() / (RAND_MAX));
-    if (r1 + r2 < 1)
-    {
-        Point *a = vecab->scal(r1);
-        Point *b = vecac->scal(r2);
-        aa->translate(a);
-        aa->translate(b);
-        return aa;
+    double r1 = ((double)rand() / RAND_MAX);
+    double r2 = ((double)rand() / RAND_MAX);
+    if (r1 + r2 > 1) {
+        r1 = 1 - r1;
+        r2 = 1 - r2;
     }
-    else
-    {
-        Point *a = vecab->scal(1 - r1);
-        Point *b = vecac->scal(1 - r2);
-        aa->translate(a);
-        aa->translate(b);
-        return aa;
-    }
+    Point *ab = vecab->scal(r1);
+    Point *ac = vecac->scal(r2);
+    Point *random_point = aa->translate(ab)->translate(ac);
+    delete vecab;
+    delete vecac;
+    delete ab;
+    delete ac;
+    return random_point;
 }
